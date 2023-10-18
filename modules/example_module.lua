@@ -37,6 +37,8 @@ function module.draw()
     love.graphics.setColor(1, 1, 1)
     love.graphics.print(text, 10, 10)
     love.graphics.print("Serial: "..BombInfo.serial, 10, 378)
+
+    love.graphics.circle("line", love.mouse.getX(), love.mouse.getY(), 20)
 end
 
 -- Some other useful functions:
