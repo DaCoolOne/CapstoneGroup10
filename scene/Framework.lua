@@ -17,16 +17,19 @@ local framework = {}
 -- local MODULE_TO_RENDER = "KVL_KCL"
 local MODULE_TO_RENDER_1 = "example_module"
 local MODULE_TO_RENDER_2 = "KVL_KCL"
+local MODULE_TO_RENDER_3 = "component"
+local MODULE_TO_RENDER_4 = "binary_decimal_module"
+
 
  -- Gets modules from files
 local module_1 = love.filesystem.load("modules/" .. MODULE_TO_RENDER_1 .. '.lua')()
 local module_2 = love.filesystem.load("modules/" .. MODULE_TO_RENDER_2 .. '.lua')()
-local module_3 = love.filesystem.load("modules/" .. MODULE_TO_RENDER_1 .. '.lua')()
-local module_4 = love.filesystem.load("modules/" .. MODULE_TO_RENDER_2 .. '.lua')()
+local module_3 = love.filesystem.load("modules/" .. MODULE_TO_RENDER_3 .. '.lua')()
+local module_4 = love.filesystem.load("modules/" .. MODULE_TO_RENDER_4 .. '.lua')()
 local module_5 = love.filesystem.load("modules/" .. MODULE_TO_RENDER_1 .. '.lua')()
 local module_6 = love.filesystem.load("modules/" .. MODULE_TO_RENDER_2 .. '.lua')()
-local module_7 = love.filesystem.load("modules/" .. MODULE_TO_RENDER_1 .. '.lua')()
-local module_8 = love.filesystem.load("modules/" .. MODULE_TO_RENDER_2 .. '.lua')()
+local module_7 = love.filesystem.load("modules/" .. MODULE_TO_RENDER_3 .. '.lua')()
+local module_8 = love.filesystem.load("modules/" .. MODULE_TO_RENDER_4 .. '.lua')()
 
  -- Stores the modules and their x and y values
 local modules = {module_1, module_2, module_3, module_4, module_5, module_6, module_7, module_8}
