@@ -4,9 +4,13 @@ manufacturers = {"Ampere Innovations", "Current Connections", "Kilowatt Custom"}
 
 -- Bomb info. Accessible by all modules, managed by the bomb info module
 BombInfo = {
+    -- serial is 8 characters A-Z (caps only) & 0-9, repeats allowed
     serial = "",
+    -- one of manufacturers above
     manufacturer = "",
+    -- 0-3
     num_batteries = -1,
+    -- Starts at 300 seconds when module.load of info_module is called
     seconds_remaining = -1
 }
 

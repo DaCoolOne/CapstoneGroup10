@@ -2,7 +2,7 @@ local module = {}
 
 -- Generally speaking, when writing Lua code you should make your variables local unless you have a good reason to make them global. It's just good to avoid cluttering the global namespace.
 -- There are exceptions, such as in the case of the info module.
-local text, img
+local text, battery
 
 local SERIAL_CHARS = "ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789"
 local SERIAL_LENGTH = 8
@@ -27,13 +27,8 @@ end
 -- Module callbacks mirror the names of the callbacks in the love2d framework. So while in love, you would override love.load or love.draw, in a module you override module.load or module.draw
 function module.load()
     -- This function is called once when the module is first loaded. You should put any first-time generation code here.
-    if love.math.random() > 0.5 then
-        text = "Hello World"
-    else
-        text = "Hello Bomb"
-    end
 
-    img = love.graphics.newImage("resources/example.png")
+    battery = love.graphics.newImage("resources/battery.png")
 
     -- current time + 5 minutes
     start_time = love.timer.getTime()
@@ -65,15 +60,19 @@ function module.draw()
         time_text = minutes..":0"..seconds
     end
 
-    love.graphics.print(time_text, 200, 200)
+    love.graphics.printf(time_text, 0, 10, 100, "right", 0, 4, 4)
+    love.graphics.setColor(1,1,1)
+    love.graphics.printf(BombInfo.serial, 0, 80, 100, "right", 0, 4, 4)
+    love.graphics.printf(BombInfo.manufacturer, 10, 160, 75, "left", 0, 4, 4)
 
-    --love.graphics.draw(img, 200, 200, 0, 1, 1, 50, 50)
+    for i = 1, BombInfo.num_batteries do
+        love.graphics.draw(battery, ((i - 1) * (100)) + 5, 300)
+    end
 
-    love.graphics.setColor(1, 1, 1)
-    love.graphics.print(text, 10, 10)
-    love.graphics.print("Serial: "..BombInfo.serial, 10, 378)
-    love.graphics.print("Manufacturer:"..BombInfo.manufacturer, 10, 350)
-    love.graphics.print("Number of Batteries:"..BombInfo.num_batteries, 10, 325)
+    -- love.graphics.setColor(1, 1, 1)
+    -- love.graphics.print("Serial: "..BombInfo.serial, 10, 378)
+    -- love.graphics.print("Manufacturer:"..BombInfo.manufacturer, 10, 350)
+    -- love.graphics.print("Number of Batteries:"..BombInfo.num_batteries, 10, 325)
 
     love.graphics.circle("line", love.mouse.getX(), love.mouse.getY(), 20)
 end
@@ -85,5 +84,4 @@ end
 -- Or any other function which is a valid love2d callback
 
 module.newBombInfo()
-
 return module
