@@ -63,8 +63,9 @@ function module.draw()
 
     love.graphics.printf(time_text, 0, 10, 100, "right", 0, 4, 4)
     love.graphics.setColor(1,1,1)
-    love.graphics.printf(BombInfo.serial, 0, 80, 100, "right", 0, 4, 4)
-    love.graphics.printf(BombInfo.manufacturer, 10, 160, 75, "left", 0, 4, 4)
+    love.graphics.printf(BombInfo.serial, 0, 60, 100, "right", 0, 4, 4)
+    love.graphics.printf(BombInfo.manufacturer, 10, 120, 75, "left", 0, 4, 4)
+    love.graphics.printf("Strikes Left: "..BombInfo.strikes_remaining, 0, 240, 100, "right", 0, 4, 4)
 
     for i = 1, BombInfo.num_batteries do
         love.graphics.draw(battery, ((i - 1) * (100)) + 5, 300)

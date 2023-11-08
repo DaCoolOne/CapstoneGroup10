@@ -11,7 +11,7 @@ BombInfo = {
     -- 0-3
     num_batteries = -1,
     -- Starts at 300(tbd? TODO) seconds when module.load of info_module is called
-    seconds_remaining = -1
+    seconds_remaining = -1,
     -- Counts how many errors left before loss
     strikes_remaining = -1
 }
