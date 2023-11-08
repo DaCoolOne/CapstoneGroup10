@@ -13,6 +13,7 @@ function module.newBombInfo()
     local manufacturer_ndx = math.random(1,3)
     BombInfo.manufacturer = manufacturers[manufacturer_ndx]
     BombInfo.num_batteries = math.random(1,3)
+    BombInfo.strikes_remaining = 3 -- TODO
     BombInfo.serial = ""
 
     for i = 1, SERIAL_LENGTH do
