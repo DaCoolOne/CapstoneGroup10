@@ -15,34 +15,48 @@ local framework = {}
 -- Super simple scene to draw modules as they will appear on the bomb.
 -- To change which module is being rendered, change this variable
 -- local MODULE_TO_RENDER = "KVL_KCL"
-local MODULE_TO_RENDER_1 = "example_module"
+local MODULE_TO_RENDER_1 = "example_module copy"
 local MODULE_TO_RENDER_2 = "KVL_KCL"
+local MODULE_TO_RENDER_3 = "colorchanging"
 
  -- Gets modules from files
 local module_1 = love.filesystem.load("modules/" .. MODULE_TO_RENDER_1 .. '.lua')()
-local module_2 = love.filesystem.load("modules/" .. MODULE_TO_RENDER_2 .. '.lua')()
-local module_3 = love.filesystem.load("modules/" .. MODULE_TO_RENDER_1 .. '.lua')()
-local module_4 = love.filesystem.load("modules/" .. MODULE_TO_RENDER_2 .. '.lua')()
-local module_5 = love.filesystem.load("modules/" .. MODULE_TO_RENDER_1 .. '.lua')()
-local module_6 = love.filesystem.load("modules/" .. MODULE_TO_RENDER_2 .. '.lua')()
+local module_2 = love.filesystem.load("modules/" .. MODULE_TO_RENDER_1 .. '.lua')()
+local module_3 = love.filesystem.load("modules/" .. MODULE_TO_RENDER_3 .. '.lua')()
+local module_4 = love.filesystem.load("modules/" .. MODULE_TO_RENDER_1 .. '.lua')()
+local module_5 = love.filesystem.load("modules/" .. MODULE_TO_RENDER_3 .. '.lua')()
+local module_6 = love.filesystem.load("modules/" .. MODULE_TO_RENDER_3 .. '.lua')()
 local module_7 = love.filesystem.load("modules/" .. MODULE_TO_RENDER_1 .. '.lua')()
-local module_8 = love.filesystem.load("modules/" .. MODULE_TO_RENDER_2 .. '.lua')()
+local module_8 = love.filesystem.load("modules/" .. MODULE_TO_RENDER_1 .. '.lua')()
 
  -- Stores the modules and their x and y values
 local modules = {module_1, module_2, module_3, module_4, module_5, module_6, module_7, module_8}
 local modules_x = {}
 local modules_y = {}
 
- -- Stores 
-local scale = 200
+ -- Scale of bomb view 
+local bomb_scale = 200
+
+ -- Scale of module view
+local module_scale = bomb_scale / 75
+
+ -- Scale of drawn module
+local drawn_module_scale = bomb_scale / 400
 
  -- Determines if the user is in a module
 local in_module = false
+
+ -- Total number of modules in a row
+local max_x = 3
 
  -- Keeps track of the selected modules coordinates
 local in_module_x = 0
 local in_module_y = 0
 local module_index = 0
+
+ -- Finds the current module's x and y
+local scalerx = 0
+local scalery = 0
 
  -- Gets the location of a modules location in the modules array
 local function getModuleLocation(index) 
@@ -103,16 +117,14 @@ local function randomizeModules()
 end
 
 function framework.mousepressed(x, y, button)
-
      -- Checks to see if the user is in a module
     if((in_module == false) and (button == 1)) then
-
          -- Goes through each module location to see if the user pressed in a module
         for i, current_module in ipairs(modules) do
              -- Checks to see if the user pressed in a module's x values
-            if((x <= (modules_x[i] + scale)) and (x > modules_x[i])) then
+            if((x <= (modules_x[i] + bomb_scale)) and (x >= modules_x[i])) then
                  -- Checks to see if the user pressed in a module's y values
-                if((y <= (modules_y[i] + scale)) and (y > modules_y[i])) then
+                if((y <= (modules_y[i] + bomb_scale)) and (y >= modules_y[i])) then
                      -- Puts the user into a module
                     in_module = true
 
@@ -121,6 +133,27 @@ function framework.mousepressed(x, y, button)
                      -- Stores the module's x and y locations
                     in_module_x, in_module_y = getModuleLocation(i)
                 end
+            end
+        end
+    elseif ((in_module == true) and (button == 1)) then
+
+         -- Converts module's location to current transform
+        local current_module_x, current_module_y = love.graphics.transformPoint(in_module_x, in_module_y)
+
+         -- Calculates module's beginning x and y values
+        current_module_x = current_module_x/(module_scale) - (25*scalerx)
+        current_module_y = current_module_y/(module_scale) - (25*scalery)
+
+         -- Calculates module's ending x and y values
+        local module_scale_x = current_module_x + (bomb_scale*(module_scale)) + 10
+        local module_scale_y = current_module_y + (bomb_scale*(module_scale)) + 10
+
+         -- Checks to see if mouse clicked in module
+        if((x <= module_scale_x) and (x >= current_module_x)) then
+            if((y <= module_scale_y) and (y >= current_module_y)) then
+
+                 -- Sends the mouse coordinates to the module's file
+                modules[module_index].mousepressed((x - current_module_x)/(module_scale)/(drawn_module_scale), (y - current_module_y)/(module_scale)/(drawn_module_scale), button)
             end
         end
     end
@@ -158,9 +191,6 @@ function framework.load()
     local number_of_modules_x = 0
     local number_of_modules_y = 0
 
-     -- Sets the total number of modules in a row
-    local max_x = 3
-
      -- Finds the x and y values of each module
     for i, current_module in ipairs(modules) do
 
@@ -177,6 +207,9 @@ function framework.load()
          -- Goes to the next module
         number_of_modules_x = number_of_modules_x + 1
     end
+
+     -- Sets dimensions of window
+    love.window.setMode(modules_x[max_x] + width_spacing - 15, modules_y[#modules_y] + width_spacing - 15)
 end
 
 function framework.update(dt)
@@ -188,45 +221,57 @@ function framework.update(dt)
 end
 
 function framework.draw()
-
      -- Stores the location of the bomb view
     love.graphics.push()
 
+     -- Stores the transform throughout draw function
+    local transform
+
      -- Checks to see if the user has selected a module
     if(in_module == true) then
-        love.graphics.push()
 
-         -- Moves to selected module
-        love.graphics.translate(in_module_x, in_module_y)
+         -- Calculates the x and y needed for the module selected
+        scalerx = (module_index - 1) % max_x
+        scalery = math.floor((module_index - 1) / max_x)
 
-        modules[module_index].draw()
+         -- Creates a new transform at the module selected and at a scale of module_scale
+        transform = love.math.newTransform((-in_module_x - (scalerx*45)), (-in_module_y - (scalery*45)), 0, module_scale, module_scale)
 
-        love.graphics.pop()
+         -- Applies the transform to zoom into the module
+        love.graphics.applyTransform(transform)
+    end
+
      -- Calls the draw function of each module at their corresponding location
-    else
-        for i, current_module in ipairs(modules) do
-
+    for i, current_module in ipairs(modules) do
          -- Stores current location
         love.graphics.push()
 
-         -- Gets the current module's x and y
+         -- Gets the current module's x and y        
         local x, y = getModuleLocation(i)
+
+        if(in_module == true) then
+             -- Finds the x and y of each module with respect to the chosen module's location
+            x, y = transform:transformPoint(x, y)
+
+             -- Scales the x and y of of each module to fit the new scale
+            x = x/(module_scale)
+            y = y/(module_scale)
+        end
 
          -- Moves to the module's location
         love.graphics.translate(x, y)
 
          -- Creates an outline of the module
-        love.graphics.rectangle("line", 0, 0, scale, scale)
+        love.graphics.rectangle("line", 0, 0, bomb_scale, bomb_scale)
 
-         -- Scales the module to fit the outline
-        love.graphics.scale(scale / 400, scale / 400)
+        -- Scales the module to fit the outline
+        love.graphics.scale(drawn_module_scale, drawn_module_scale)
 
          -- Calls the module's draw function
         current_module.draw()
 
          -- Returns to the stored location
         love.graphics.pop()
-        end
     end
 
      -- Returns to the stored location
