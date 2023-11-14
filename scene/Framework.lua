@@ -12,9 +12,7 @@ local framework = {}
         -- DONT OVERRUN .run
         -- etc.
 
--- Super simple scene to draw modules as they will appear on the bomb.
--- To change which module is being rendered, change this variable
--- local MODULE_TO_RENDER = "KVL_KCL"
+ -- Modules to load
 local MODULE_TO_RENDER_1 = "example_module copy"
 local MODULE_TO_RENDER_2 = "KVL_KCL"
 local MODULE_TO_RENDER_3 = "colorchanging"
@@ -45,6 +43,9 @@ local drawn_module_scale = bomb_scale / 400
 
  -- Determines if the user is in a module
 local in_module = false
+
+ -- Determines if left click is pressed
+local button_pressed = false
 
  -- Total number of modules in a row
 local max_x = 3
@@ -117,17 +118,23 @@ local function randomizeModules()
 end
 
 function framework.mousepressed(x, y, button)
-     -- Checks to see if the user is in a module
+     -- Button has been pressed
+    button_pressed = true
+
+     -- Checks to see if user in bomb view
     if((in_module == false) and (button == 1)) then
+
          -- Goes through each module location to see if the user pressed in a module
         for i, current_module in ipairs(modules) do
-             -- Checks to see if the user pressed in a module's x values
+
+             -- Checks to see if user selected a module
             if((x <= (modules_x[i] + bomb_scale)) and (x >= modules_x[i])) then
-                 -- Checks to see if the user pressed in a module's y values
                 if((y <= (modules_y[i] + bomb_scale)) and (y >= modules_y[i])) then
+
                      -- Puts the user into a module
                     in_module = true
 
+                     -- Records the module's array position
                     module_index = i
 
                      -- Stores the module's x and y locations
@@ -135,6 +142,7 @@ function framework.mousepressed(x, y, button)
                 end
             end
         end
+     -- Checks to see if user is in module view
     elseif ((in_module == true) and (button == 1)) then
 
          -- Converts module's location to current transform
@@ -154,6 +162,58 @@ function framework.mousepressed(x, y, button)
 
                  -- Sends the mouse coordinates to the module's file
                 modules[module_index].mousepressed((x - current_module_x)/(module_scale)/(drawn_module_scale), (y - current_module_y)/(module_scale)/(drawn_module_scale), button)
+            end
+        end
+    end
+end
+
+function framework.mousereleased(x, y, button)
+     -- Button has been unpressed
+    button_pressed = false
+
+    if ((in_module == true) and (button == 1)) then
+
+        -- Converts module's location to current transform
+       local current_module_x, current_module_y = love.graphics.transformPoint(in_module_x, in_module_y)
+
+        -- Calculates module's beginning x and y values
+       current_module_x = current_module_x/(module_scale) - (25*scalerx)
+       current_module_y = current_module_y/(module_scale) - (25*scalery)
+
+        -- Calculates module's ending x and y values
+       local module_scale_x = current_module_x + (bomb_scale*(module_scale)) + 10
+       local module_scale_y = current_module_y + (bomb_scale*(module_scale)) + 10
+
+        -- Checks to see if mouse clicked in module
+       if((x <= module_scale_x) and (x >= current_module_x)) then
+           if((y <= module_scale_y) and (y >= current_module_y)) then
+
+                -- Sends the mouse coordinates to the module's file
+               modules[module_index].mousereleased((x - current_module_x)/(module_scale)/(drawn_module_scale), (y - current_module_y)/(module_scale)/(drawn_module_scale), button)
+            end
+        end
+    end
+end
+
+function framework.mousemoved(x, y)
+    if(button_pressed == true) then
+         -- Converts module's location to current transform
+        local current_module_x, current_module_y = love.graphics.transformPoint(in_module_x, in_module_y)
+
+         -- Calculates module's beginning x and y values
+        current_module_x = current_module_x/(module_scale) - (25*scalerx)
+        current_module_y = current_module_y/(module_scale) - (25*scalery)
+
+         -- Calculates module's ending x and y values
+        local module_scale_x = current_module_x + (bomb_scale*(module_scale)) + 10
+        local module_scale_y = current_module_y + (bomb_scale*(module_scale)) + 10
+
+         -- Checks to see if mouse clicked in module
+        if((x <= module_scale_x) and (x >= current_module_x) ) then
+           if((y <= module_scale_y) and (y >= current_module_y)) then
+
+                -- Sends the mouse coordinates to the module's file
+               modules[module_index].mousemoved((x - current_module_x)/(module_scale)/(drawn_module_scale), (y - current_module_y)/(module_scale)/(drawn_module_scale), button)
             end
         end
     end
