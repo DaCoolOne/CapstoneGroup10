@@ -168,9 +168,11 @@ function framework.mousepressed(x, y, button)
 end
 
 function framework.mousereleased(x, y, button)
-     -- Button has been unpressed
+
+    -- Button has been unpressed
     button_pressed = false
 
+     -- Checks to see if it is zoomed into module and left mouse is selected
     if ((in_module == true) and (button == 1)) then
 
         -- Converts module's location to current transform
@@ -196,7 +198,9 @@ function framework.mousereleased(x, y, button)
 end
 
 function framework.mousemoved(x, y)
-    if(button_pressed == true) then
+
+     -- Checks to see if left mouse is pressed and module is zoomed in
+    if((button_pressed == true) and (in_module == true)) then
          -- Converts module's location to current transform
         local current_module_x, current_module_y = love.graphics.transformPoint(in_module_x, in_module_y)
 

@@ -8,16 +8,41 @@ local text, img
 local mousex = 50
 local mousey = 50
 
+local button_pressed = false
+
 function module.mousepressed(x, y, button)
     if(button == 1) then
-        --if((x >= 0) and (x <= 400) and (y >= 0) and (y <= 400)) then
+        if((x >= 0) and (x <= 400) and (y >= 0) and (y <= 400)) then
 
             mousex, mousey = love.graphics.transformPoint(x, y)
 
             mousex = x
             mousey = y
-        --end
+        end
     end
+end
+
+function module.mousereleased(x, y, button)
+    if(button == 1) then
+        button_pressed = false
+
+        if((x >= 0) and (x <= 400) and (y >= 0) and (y <= 400)) then
+            mousex = x
+            mousey = y
+        end
+    end
+end
+
+function module.mousemoved(x, y)
+    if(button_pressed == true) then
+        if((x >= 0) and (x <= 400) and (y >= 0) and (y <= 400)) then
+            mousex = x
+            mousey = y
+        end
+    end
+
+    mousex = x
+    mousey = y
 end
 
 -- Module callbacks mirror the names of the callbacks in the love2d framework. So while in love, you would override love.load or love.draw, in a module you override module.load or module.draw
