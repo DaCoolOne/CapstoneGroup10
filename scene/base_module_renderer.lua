@@ -2,7 +2,7 @@
 
 -- Super simple scene to draw modules as they will appear on the bomb.
 -- To change which module is being rendered, change this variable
-local MODULE_TO_RENDER = "example_module"
+local MODULE_TO_RENDER = "binary_decimal_module"
 
 local bmr = {}
 local mousex, mousey = 0, 0
