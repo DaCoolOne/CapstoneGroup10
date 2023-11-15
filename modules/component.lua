@@ -54,9 +54,11 @@ function component.update(dt)
     if y > 399 then
       y=399
     end
-    if love.keyboard.isDown("k") then
-      cursor.x = x
-      cursor.y = y
+    if love.mousepressed() then
+      cursor.x , cursor.y = love.mouse.getPosition()
+      while love.mousereleased() == false do
+        local g = cursor.x
+      end
     end
 end
 function component.draw()
