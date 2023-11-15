@@ -1,9 +1,22 @@
 local global_consts = {}
 
+manufacturers = {"Ampere Innovations", "Current Connections", "Kilowatt Custom"}
+
 -- Bomb info. Accessible by all modules, managed by the bomb info module
 BombInfo = {
-    serial = "3X4MP1E"
+    -- serial is 8 characters A-Z (caps only) & 0-9, repeats allowed
+    serial = "",
+    -- one of manufacturers above
+    manufacturer = "",
+    -- 0-3
+    num_batteries = -1,
+    -- Starts at 300(tbd? TODO) seconds when module.load of info_module is called
+    seconds_remaining = -1,
+    -- Counts how many errors left before loss
+    strikes_remaining = -1
 }
+
+math.randomseed(os.time())
 
 -- A little black magic to prevent people from setting global variables accidentally.
 setmetatable(_G,{ __index = global_consts, __newindex = function(_, k, _) error(("Accidental global variable %s detected! Please use the \"local\" keyword to avoid cluttering the global namespace!\n\nIf you intended to create a global variable, please contact Scott."):format(k), 2) end })
