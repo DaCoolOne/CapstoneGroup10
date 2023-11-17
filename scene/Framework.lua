@@ -142,8 +142,8 @@ function framework.mousepressed(x, y, button)
                 end
             end
         end
-     -- Checks to see if user is in module view
-    elseif ((in_module == true) and (button == 1)) then
+     -- Checks to see if user is in module view and if mousepressed exists inside of module
+    elseif ((in_module == true) and (button == 1) and (modules[module_index].mousepressed ~= nil)) then
 
          -- Converts module's location to current transform
         local current_module_x, current_module_y = love.graphics.transformPoint(in_module_x, in_module_y)
@@ -172,8 +172,8 @@ function framework.mousereleased(x, y, button)
     -- Button has been unpressed
     button_pressed = false
 
-     -- Checks to see if it is zoomed into module and left mouse is selected
-    if ((in_module == true) and (button == 1)) then
+     -- Checks to see if it is zoomed into module, left mouse is selected, and mousereleased exists in the module
+    if ((in_module == true) and (button == 1) and (modules[module_index].mousereleased ~= nil)) then
 
         -- Converts module's location to current transform
        local current_module_x, current_module_y = love.graphics.transformPoint(in_module_x, in_module_y)
@@ -197,10 +197,10 @@ function framework.mousereleased(x, y, button)
     end
 end
 
-function framework.mousemoved(x, y)
+function framework.mousemoved(x, y, dx, dy)
 
-     -- Checks to see if left mouse is pressed and module is zoomed in
-    if((button_pressed == true) and (in_module == true)) then
+     -- Checks to see if left mouse is pressed, module is zoomed in, and mousemoved exists in the module
+    if((button_pressed == true) and (in_module == true) and (modules[module_index].mousemoved ~= nil)) then
          -- Converts module's location to current transform
         local current_module_x, current_module_y = love.graphics.transformPoint(in_module_x, in_module_y)
 
@@ -217,7 +217,8 @@ function framework.mousemoved(x, y)
            if((y <= module_scale_y) and (y >= current_module_y)) then
 
                 -- Sends the mouse coordinates to the module's file
-               modules[module_index].mousemoved((x - current_module_x)/(module_scale)/(drawn_module_scale), (y - current_module_y)/(module_scale)/(drawn_module_scale), button)
+               modules[module_index].mousemoved((x - current_module_x)/(module_scale)/(drawn_module_scale), (y - current_module_y)/(module_scale)/(drawn_module_scale), 
+            dx/(module_scale)/(drawn_module_scale), dy/(module_scale)/(drawn_module_scale))
             end
         end
     end
@@ -231,6 +232,9 @@ function framework.keypressed(key)
 
          -- Returns to bomb scene
         in_module = false
+    elseif(in_module and (modules[module_index].keypressed ~= nil)) then
+         -- Activates keypressed of module
+        modules[module_index].keypressed(key)
     end
 end
 
