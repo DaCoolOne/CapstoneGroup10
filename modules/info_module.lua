@@ -9,6 +9,10 @@ local SERIAL_LENGTH = 8
 
 local start_time, end_time
 
+local count_strike = function()
+    BombInfo.strikes_remaining = BombInfo.strikes_remaining - 1
+end
+
 function module.newBombInfo()
     local manufacturer_ndx = math.random(1,3)
     BombInfo.manufacturer = manufacturers[manufacturer_ndx]
@@ -85,5 +89,6 @@ end
 -- function module.mousemoved
 -- Or any other function which is a valid love2d callback
 
+rawset(_G, "count_strike", count_strike)
 module.newBombInfo()
 return module
