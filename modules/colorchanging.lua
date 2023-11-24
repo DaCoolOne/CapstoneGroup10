@@ -11,9 +11,13 @@ local mousey = 0
 
 local button_pressed = false
 
+local complete
+
 -- Module callbacks mirror the names of the callbacks in the love2d framework. So while in love, you would override love.load or love.draw, in a module you override module.load or module.draw
 function module.load()
     img = love.graphics.newImage("resources/example.png")
+
+    complete = false
 end
 
 function module.update(dt)
@@ -55,6 +59,7 @@ function module.mousereleased(x, y, button)
         if((x >= 0) and (x <= 400) and (y >= 0) and (y <= 400)) then
             mousex = x
             mousey = y
+            complete = true
         end
     end
 end
