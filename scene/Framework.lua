@@ -152,7 +152,8 @@ function framework.mousepressed(x, y, button)
             if((y <= module_scale_y) and (y >= current_module_y)) then
 
                  -- Sends the mouse coordinates to the module's file
-                modules[module_index].mousepressed((x - current_module_x)/(module_scale)/(drawn_module_scale), (y - current_module_y)/(module_scale)/(drawn_module_scale), button)
+                modules[module_index].mousepressed((x - current_module_x)/(module_scale)/(drawn_module_scale), 
+                (y - current_module_y)/(module_scale)/(drawn_module_scale), button)
             end
         end
     end
@@ -170,7 +171,8 @@ function framework.mousereleased(x, y, button)
         for i, current_module in ipairs(modules) do
 
             -- Checks to see if user selected a module
-            if((x <= (modules_x[i] + bomb_scale)) and (x >= modules_x[i]) and (y <= (modules_y[i] + bomb_scale)) and (y >= modules_y[i])) then
+            if((x <= (modules_x[i] + bomb_scale)) and (x >= modules_x[i]) 
+            and (y <= (modules_y[i] + bomb_scale)) and (y >= modules_y[i])) then
 
                     -- Puts the user into a module
                    in_module = true
@@ -184,7 +186,8 @@ function framework.mousereleased(x, y, button)
         end
     
      -- Checks to see if it is zoomed into module, left mouse is selected, mousereleased exists in the module, and not in the exit screen
-    elseif ((in_module == true) and (button == 1) and (modules[module_index].mousereleased ~= nil) and (in_exit_screen == false)) then
+    elseif ((in_module == true) and (button == 1) and 
+    (modules[module_index].mousereleased ~= nil) and (in_exit_screen == false)) then
 
          -- Converts module's location to current transform
         local current_module_x, current_module_y = love.graphics.transformPoint(in_module_x, in_module_y)
@@ -201,18 +204,21 @@ function framework.mousereleased(x, y, button)
         if((x <= module_scale_x) and (x >= current_module_x) and (y <= module_scale_y) and (y >= current_module_y)) then
 
                 -- Sends the mouse coordinates to the module's file
-               modules[module_index].mousereleased((x - current_module_x)/(module_scale)/(drawn_module_scale), (y - current_module_y)/(module_scale)/(drawn_module_scale), button)
+               modules[module_index].mousereleased((x - current_module_x)/(module_scale)/(drawn_module_scale), 
+               (y - current_module_y)/(module_scale)/(drawn_module_scale), button)
         end
 
      -- Checks to see if the user is in the exit screen
     elseif((button == 1) and (in_exit_screen == true)) then
 
          -- Switches back to the main menu if user presses yes
-        if((x >= love.graphics.getWidth()/5) and (x <= (love.graphics.getWidth()/5 + 200)) and (y >= love.graphics.getHeight()/3) and (y <= (love.graphics.getHeight()/3 + 50))) then
+        if((x >= love.graphics.getWidth()/5) and (x <= (love.graphics.getWidth()/5 + 200))
+         and (y >= love.graphics.getHeight()/3) and (y <= (love.graphics.getHeight()/3 + 50))) then
             ChangeScene("Main_Menu")
 
          -- Goes back to the bomb if the user presses no
-        elseif((x >= (love.graphics.getWidth()/5 + spacing)) and (x <= (love.graphics.getWidth()/5 + 200 + spacing)) and (y >= love.graphics.getHeight()/3) and (y <= (love.graphics.getHeight()/3 + 50))) then
+        elseif((x >= (love.graphics.getWidth()/5 + spacing)) and (x <= (love.graphics.getWidth()/5 + 200 + spacing))
+         and (y >= love.graphics.getHeight()/3) and (y <= (love.graphics.getHeight()/3 + 50))) then
             in_exit_screen = false
         end
     end

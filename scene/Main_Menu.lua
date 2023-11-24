@@ -41,7 +41,8 @@ function main_menu.mousereleased(x, y, button)
     if((button == 1) and (button_pressed == true) ) then
 
          -- Checks to see if the mouse is still on the button
-        if((x >= button_x[button_selected]) and (x <= (button_x[button_selected] + button_width)) and (y >= button_y[button_selected]) and (y <= (button_y[button_selected] + button_height))) then
+        if((x >= button_x[button_selected]) and (x <= (button_x[button_selected] + button_width)) 
+        and (y >= button_y[button_selected]) and (y <= (button_y[button_selected] + button_height))) then
 
              -- Checks to see if level select is chosen
             if(button_selected == 1) then
