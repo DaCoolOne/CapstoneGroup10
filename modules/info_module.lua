@@ -13,11 +13,16 @@ local count_strike = function()
     BombInfo.strikes_remaining = BombInfo.strikes_remaining - 1
 end
 
+local mark_solved = function()
+    BombInfo.modules_solved = BombInfo.modules_solved + 1
+end
+
 function module.newBombInfo()
     local manufacturer_ndx = math.random(1,3)
     BombInfo.manufacturer = manufacturers[manufacturer_ndx]
     BombInfo.num_batteries = math.random(1,3)
     BombInfo.strikes_remaining = 3 -- TODO
+    BombInfo.modules_solved = 0
     BombInfo.serial = ""
 
     for i = 1, SERIAL_LENGTH do
@@ -90,5 +95,6 @@ end
 -- Or any other function which is a valid love2d callback
 
 rawset(_G, "count_strike", count_strike)
+rawset(_G, "mark_solved", mark_solved)
 module.newBombInfo()
 return module
