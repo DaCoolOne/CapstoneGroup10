@@ -83,7 +83,11 @@ function module.draw()
     
     -- Add backspace button
 
-    love.graphics.setColor(1,0,0)
+    if completed then
+        love.graphics.setColor(0,1,0)
+    else
+        love.graphics.setColor(1,0,0)
+    end
     love.graphics.rectangle("line", 20, 10, 370, 75)
     love.graphics.printf(input, 0, 25, 150, "right", 0, 2.5, 2.5)
     love.graphics.setColor(1,1,1)
@@ -107,7 +111,7 @@ function module.mousepressed(x, y)
 end
 
 function module.mousereleased(x, y)
-    if buttonPressed == module.getButtonPressed(x, y) then
+    if buttonPressed == module.getButtonPressed(x, y) and not completed then
         -- Do nothing if no button is pressed, backspace is pressed, or input is 10 or more chars
         if buttonPressed ~= -1 and buttonPressed ~= "BACK" and buttonPressed ~= "ENTER" and #input < 17 then
             input = input .. buttonPressed
