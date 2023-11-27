@@ -1,11 +1,11 @@
- -- Main_Menu.lua
+ -- Win_Lose_Screen.lua
  -- By: Michael Johnson
-local main_menu = {}
+ local win_lose_screen = {}
 
  -- Stores the positions of the buttons
 local button_x = {}
 local button_y = {}
-local button_words = {"Level Select", "  Options", "Quit Game"}
+local button_words = {"Main Menu", "Quit Game"}
 
  -- Stores button sizes
 local button_width = 400
@@ -16,13 +16,13 @@ local mousey = 0
 local button_pressed = false
 local button_selected = 0
 
-function main_menu.mousepressed(x, y, button)
+function win_lose_screen.mousepressed(x, y, button)
 
      -- Checks to see if left click is used
     if(button == 1) then
 
          -- Goes through each button
-        for i=1,3 do
+        for i=1,2 do
 
              -- Checks to see if a button is pressed
             if((x >= button_x[i]) and (x <= (button_x[i] + button_width)) and (y >= button_y[i]) and (y <= (button_y[i] + button_height))) then
@@ -35,7 +35,7 @@ function main_menu.mousepressed(x, y, button)
     end
 end
 
-function main_menu.mousereleased(x, y, button)
+function win_lose_screen.mousereleased(x, y, button)
 
      -- Checks to see if a button was pressed with left click
     if((button == 1) and (button_pressed == true) ) then
@@ -46,11 +46,7 @@ function main_menu.mousereleased(x, y, button)
 
              -- Checks to see if level select is chosen
             if(button_selected == 1) then
-                ChangeScene("Level_Select")
-             -- Allows the user to press it, but it doesn't do anything yet
-            elseif(button_selected == 2) then
-                button_pressed = false
-             -- Closes game if quit is chosen
+                ChangeScene("Main_Menu")
             else
                  -- Quits the game and Love2D
                 love.event.quit()
@@ -63,32 +59,37 @@ function main_menu.mousereleased(x, y, button)
     end
 end
 
-function main_menu.keypressed(key)
-end
-
-function main_menu.load()
+function win_lose_screen.load()
 
      -- Finds the first button's position
-    local x = love.graphics.getWidth()/4
-    local y = love.graphics.getHeight()/4
+    local x = love.graphics.getWidth()/5
+    local y = love.graphics.getHeight()/2
 
      -- Saves each button position
-    for i=1,3 do
+    for i=1,2 do
         table.insert(button_x, x)
-        table.insert(button_y, (y*(i/2)))
+        table.insert(button_y, (y*(i/4) + y/1.5))
+    end
+end
+
+function win_lose_screen.update(dt)
+end
+
+function win_lose_screen.draw()
+
+     -- Gets the X and Y of the window
+    local window_x = love.graphics.getWidth()
+    local window_y = love.graphics.getHeight()
+
+    love.graphics.setColor(1,1,1)
+    if((BombInfo.strikes_remaining == 0) or (BombInfo.seconds_remaining == -1)) then
+        love.graphics.print("Sorry, You Lose.", window_x/3.5, window_y/3, 0, 3)
+    else
+        love.graphics.print("Congratulations, You Win!", window_x/6, window_y/3, 0, 3)
     end
 
-     -- Sets the size of the window
-    love.window.setMode(button_width*2, button_width)
-end
-
-function main_menu.update(dt)
-end
-
-function main_menu.draw()
-
      -- Draws each button
-    for i=1,3 do
+    for i=1,2 do
 
          -- Switches the color of the button if it is pressed
         if((button_pressed == true) and (i == button_selected)) then
@@ -106,4 +107,4 @@ function main_menu.draw()
     end
 end
 
-return main_menu
+return win_lose_screen

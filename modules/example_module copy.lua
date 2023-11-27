@@ -10,9 +10,6 @@ local mousey = 50
 
 local button_pressed = false
 
-local complete
-
-
 function module.mousepressed(x, y, button)
     if(button == 1) then
         if((x >= 0) and (x <= 400) and (y >= 0) and (y <= 400)) then
@@ -22,6 +19,8 @@ function module.mousepressed(x, y, button)
             mousex = x
             mousey = y
         end
+
+        mark_solved()
     end
 end
 
@@ -32,8 +31,6 @@ function module.mousereleased(x, y, button)
         if((x >= 0) and (x <= 400) and (y >= 0) and (y <= 400)) then
             mousex = x
             mousey = y
-
-            complete = true
         end
     end
 end
@@ -58,8 +55,6 @@ function module.load()
     else
         text = "Hello Bomb"
     end
-
-    complete = false
 
     img = love.graphics.newImage("resources/example.png")
 end

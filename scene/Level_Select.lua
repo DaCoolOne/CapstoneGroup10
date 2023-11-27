@@ -5,7 +5,7 @@ local main_menu = {}
  -- Stores the positions of the buttons
 local button_x = {}
 local button_y = {}
-local button_words = {"Level Select", "  Options", "Quit Game"}
+local button_words = {"Level 1", "Level 2", "Level 3", "Level 4", "  Back"}
 
  -- Stores button sizes
 local button_width = 400
@@ -22,7 +22,7 @@ function main_menu.mousepressed(x, y, button)
     if(button == 1) then
 
          -- Goes through each button
-        for i=1,3 do
+        for i, current_module in ipairs(button_words) do
 
              -- Checks to see if a button is pressed
             if((x >= button_x[i]) and (x <= (button_x[i] + button_width)) and (y >= button_y[i]) and (y <= (button_y[i] + button_height))) then
@@ -44,16 +44,17 @@ function main_menu.mousereleased(x, y, button)
         if((x >= button_x[button_selected]) and (x <= (button_x[button_selected] + button_width)) 
         and (y >= button_y[button_selected]) and (y <= (button_y[button_selected] + button_height))) then
 
-             -- Checks to see if level select is chosen
+             -- Checks to see if level is chosen or the user goes back to main menu
             if(button_selected == 1) then
-                ChangeScene("Level_Select")
-             -- Allows the user to press it, but it doesn't do anything yet
+                ChangeScene("Level1")
             elseif(button_selected == 2) then
-                button_pressed = false
-             -- Closes game if quit is chosen
+                ChangeScene("Level2")
+            elseif(button_selected == 3) then
+                ChangeScene("Level3")
+            elseif(button_selected == 4) then
+                ChangeScene("Level4")
             else
-                 -- Quits the game and Love2D
-                love.event.quit()
+                love.event.quit("restart")
             end
         
          -- Resets select if mouse is not over button when released
@@ -70,16 +71,16 @@ function main_menu.load()
 
      -- Finds the first button's position
     local x = love.graphics.getWidth()/4
-    local y = love.graphics.getHeight()/4
+    local y = love.graphics.getHeight()/2
 
      -- Saves each button position
-    for i=1,3 do
+     for i, current in ipairs(button_words) do
         table.insert(button_x, x)
         table.insert(button_y, (y*(i/2)))
     end
 
      -- Sets the size of the window
-    love.window.setMode(button_width*2, button_width)
+    love.window.setMode(button_width*2, button_width*1.5)
 end
 
 function main_menu.update(dt)
@@ -88,7 +89,7 @@ end
 function main_menu.draw()
 
      -- Draws each button
-    for i=1,3 do
+    for i, current in ipairs(button_words) do
 
          -- Switches the color of the button if it is pressed
         if((button_pressed == true) and (i == button_selected)) then

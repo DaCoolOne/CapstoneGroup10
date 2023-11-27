@@ -1,6 +1,6 @@
- -- framework.lua
+ -- level1.lua
  -- By: Michael Johnson
-local framework = {}
+local level1 = {}
 
  -- Modules to load
 local MODULE_TO_RENDER_1 = "example_module copy"
@@ -11,14 +11,9 @@ local MODULE_TO_RENDER_4 = "info_module"
 local module_1 = love.filesystem.load("modules/" .. MODULE_TO_RENDER_4 .. '.lua')()
 local module_2 = love.filesystem.load("modules/" .. MODULE_TO_RENDER_1 .. '.lua')()
 local module_3 = love.filesystem.load("modules/" .. MODULE_TO_RENDER_3 .. '.lua')()
-local module_4 = love.filesystem.load("modules/" .. MODULE_TO_RENDER_1 .. '.lua')()
-local module_5 = love.filesystem.load("modules/" .. MODULE_TO_RENDER_3 .. '.lua')()
-local module_6 = love.filesystem.load("modules/" .. MODULE_TO_RENDER_3 .. '.lua')()
-local module_7 = love.filesystem.load("modules/" .. MODULE_TO_RENDER_1 .. '.lua')()
-local module_8 = love.filesystem.load("modules/" .. MODULE_TO_RENDER_1 .. '.lua')()
 
  -- Stores the modules and their x and y values
-local modules = {module_1, module_2, module_3, module_4, module_5, module_6, module_7, module_8}
+local modules = {module_1, module_2, module_3}
 local modules_x = {}
 local modules_y = {}
 
@@ -107,7 +102,7 @@ local function randomizeModules()
     end
 end
 
-function framework.mousepressed(x, y, button)
+function level1.mousepressed(x, y, button)
      -- Button has been pressed
     button_pressed = true
 
@@ -137,7 +132,7 @@ function framework.mousepressed(x, y, button)
     end
 end
 
-function framework.mousereleased(x, y, button)
+function level1.mousereleased(x, y, button)
 
     -- Button has been unpressed
     button_pressed = false
@@ -204,7 +199,7 @@ function framework.mousereleased(x, y, button)
     end
 end
 
-function framework.mousemoved(x, y, dx, dy)
+function level1.mousemoved(x, y, dx, dy)
 
      -- Checks to see if left mouse is pressed, module is zoomed in, mousemoved exists in the module, and not in the exit screen
     if((button_pressed == true) and (in_module == true) and (modules[module_index].mousemoved ~= nil) and (in_exit_screen == false)) then
@@ -230,7 +225,7 @@ function framework.mousemoved(x, y, dx, dy)
 end
 
  -- Overrides keypressed
-function framework.keypressed(key)
+function level1.keypressed(key)
 
      -- Turns on exit screen if user presses escape in bomb view
     if((key == "escape") and not in_module) then
@@ -246,7 +241,7 @@ function framework.keypressed(key)
     end
 end
 
-function framework.load()
+function level1.load()
 
      -- Randomizes the location of the modules
     randomizeModules()
@@ -277,11 +272,11 @@ function framework.load()
         number_of_modules_x = number_of_modules_x + 1
     end
 
-     -- Sets dimensions of window
-    love.window.setMode(modules_x[max_x] + spacing - 15, modules_y[#modules_y] + spacing - 15)
+     -- Sets dimensions of window for 3 modules
+    love.window.setMode((spacing * 3) + 10, (spacing * 3) + 10)
 end
 
-function framework.update(dt)
+function level1.update(dt)
 
      -- Calls each module's update function
     for i, current_module in ipairs(modules) do
@@ -294,7 +289,7 @@ function framework.update(dt)
     end
 end
 
-function framework.draw()
+function level1.draw()
 
      -- Stores the location of the bomb view
     love.graphics.push()
@@ -354,7 +349,7 @@ function framework.draw()
         love.graphics.pop()
     end
 
-     -- Puts the user into an exit screen
+    -- Puts the user into an exit screen
     if(in_exit_screen == true) then
          -- Creates the background of exit screen
         love.graphics.setColor(0.5,0.5,0.5)
@@ -379,4 +374,4 @@ function framework.draw()
     love.graphics.pop()
 end
 
-return framework
+return level1
