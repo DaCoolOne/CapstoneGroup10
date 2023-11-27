@@ -10,6 +10,7 @@ local goal_num
 local HexChars = {"0","1","2","3","4","5","6","7","8","9","A","B","C","D","E","F"}
 local buttons = {}
 local start_text
+local completed
 
 -- Module callbacks mirror the names of the callbacks in the love2d framework. So while in love, you would override love.load or love.draw, in a module you override module.load or module.draw
 function module.load()
@@ -59,6 +60,7 @@ function module.load()
         text = "ENTER"
     }
 
+    completed = false
 end
 
 function module.update(dt)
@@ -115,23 +117,26 @@ function module.mousereleased(x, y)
             if BombInfo.num_batteries == 1 then
                 -- Hex to Bin
                 if tonumber(input, 2) == goal_num then
-                    --Done
+                    completed = true
+                    mark_solved()
                 else
-                    --Strike
+                    count_strike()
                 end
             elseif BombInfo.num_batteries == 2 then
                 -- dec to bin
                 if tonumber(input, 2) == goal_num then
-                    --Done
+                    completed = true
+                    mark_solved()
                 else
-                    --Strike
+                    count_strike()
                 end
             elseif BombInfo.num_batteries == 3 then
                 -- dec to hex
                 if tonumber(input, 16) == goal_num then
-                    --Done
+                    completed = true
+                    mark_solved()
                 else
-                    --Strike
+                    count_strike()
                 end
             end
         end
