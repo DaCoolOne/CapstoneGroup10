@@ -353,7 +353,7 @@ function level1.draw()
     if(in_exit_screen == true) then
          -- Creates the background of exit screen
         love.graphics.setColor(0.5,0.5,0.5)
-        love.graphics.rectangle("fill", love.graphics.getWidth()/6, love.graphics.getHeight()/6, modules_x[max_x], modules_y[#modules_y])
+        love.graphics.rectangle("fill", love.graphics.getWidth()/6, love.graphics.getHeight()/6, modules_x[max_x], (modules_y[#modules_y] + spacing))
 
          -- Creates text for exit screen
         love.graphics.setColor(0,0,0)
