@@ -101,5 +101,6 @@ end
 
 rawset(_G, "count_strike", count_strike)
 rawset(_G, "mark_solved", mark_solved)
+
 module.newBombInfo()
 return module
