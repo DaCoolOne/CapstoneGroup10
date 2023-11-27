@@ -22,7 +22,7 @@ math.randomseed(os.time())
 setmetatable(_G,{ __index = global_consts, __newindex = function(_, k, _) error(("Accidental global variable %s detected! Please use the \"local\" keyword to avoid cluttering the global namespace!\n\nIf you intended to create a global variable, please contact Scott."):format(k), 2) end })
 
 -- Local variables
-local DEFAULT_SCENE = "framework"
+local DEFAULT_SCENE = "Main_Menu"
 local current_scene = {}
 
 local queued_scene_change

@@ -19,6 +19,8 @@ function module.mousepressed(x, y, button)
             mousex = x
             mousey = y
         end
+
+        mark_solved()
     end
 end
 
