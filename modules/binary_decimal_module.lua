@@ -3,20 +3,33 @@ local module = {}
 -- Generally speaking, when writing Lua code you should make your variables local unless you have a good reason to make them global. It"s just good to avoid cluttering the global namespace.
 -- There are exceptions, such as in the case of the info module.
 local light_timer = 0
-local text, img
+
+local img
+local input
+local goal_num
 local HexChars = {"0","1","2","3","4","5","6","7","8","9","A","B","C","D","E","F"}
 local buttons = {}
+local start_text
+local completed
 
 -- Module callbacks mirror the names of the callbacks in the love2d framework. So while in love, you would override love.load or love.draw, in a module you override module.load or module.draw
 function module.load()
     -- This function is called once when the module is first loaded. You should put any first-time generation code here.
-    -- if love.math.random() > 0.5 then
-    --     text = "Hello World"
-    -- else
-    --     text = "Hello Bomb"
-    -- end
+    goal_num = math.random(2048, 65535)
+    BombInfo.num_batteries = 1
 
-    text = ""
+    if BombInfo.num_batteries == 1 then
+        -- Hex to Bin
+        start_text = string.upper(string.format("%x", goal_num))
+    elseif BombInfo.num_batteries == 2 then
+        -- dec to bin
+        start_text = string.upper(string.format(goal_num))
+    elseif BombInfo.num_batteries == 3 then
+        -- dec to hex
+        start_text = string.upper(string.format(goal_num))
+    end
+
+    input = ""
     img = love.graphics.newImage("resources/example.png")
 
     for x = 1, 4, 1 
@@ -39,7 +52,15 @@ function module.load()
         h = 100,
         text = "BACK"
     }
+    buttons["ENTER"] = {
+        x = 315,
+        y = 248,
+        w = 100,
+        h = 100,
+        text = "ENTER"
+    }
 
+    completed = false
 end
 
 function module.update(dt)
@@ -62,13 +83,15 @@ function module.draw()
     
     -- Add backspace button
 
-    love.graphics.setColor(1,0,0)
-    love.graphics.rectangle("line", 100, 10, 290, 75)
-    love.graphics.printf(text, 100, 25, 95, "right", 0, 3, 3)
-
-    -- love.graphics.setColor(1, 1, 1)
-    -- love.graphics.print(text, 10, 10)
-    -- love.graphics.print("Serial: "..BombInfo.serial, 10, 378)
+    if completed then
+        love.graphics.setColor(0,1,0)
+    else
+        love.graphics.setColor(1,0,0)
+    end
+    love.graphics.rectangle("line", 20, 10, 370, 75)
+    love.graphics.printf(input, 0, 25, 150, "right", 0, 2.5, 2.5)
+    love.graphics.setColor(1,1,1)
+    love.graphics.printf(start_text, 200, 86, 95, "right", 0, 2, 2)
 end
 
 local buttonPressed
@@ -88,15 +111,43 @@ function module.mousepressed(x, y)
 end
 
 function module.mousereleased(x, y)
-    if buttonPressed == module.getButtonPressed(x, y) then
+    if buttonPressed == module.getButtonPressed(x, y) and not completed then
         -- Do nothing if no button is pressed, backspace is pressed, or input is 10 or more chars
-        if buttonPressed ~= -1 and buttonPressed ~= "BACK" and #text < 10 then
-            text = text .. buttonPressed
-        elseif buttonPressed ~= -1 and buttonPressed == "BACK" and #text > 0 then
-            text = text:sub(1, -2)
+        if buttonPressed ~= -1 and buttonPressed ~= "BACK" and buttonPressed ~= "ENTER" and #input < 17 then
+            input = input .. buttonPressed
+        elseif buttonPressed ~= -1 and buttonPressed == "BACK" and buttonPressed ~= "ENTER" and #input > 0 then
+            input = input:sub(1, -2)
+        elseif  buttonPressed ~= -1 and buttonPressed ~= "BACK" and buttonPressed == "ENTER" then
+            if BombInfo.num_batteries == 1 then
+                -- Hex to Bin
+                if tonumber(input, 2) == goal_num then
+                    completed = true
+                    mark_solved()
+                else
+                    count_strike()
+                end
+            elseif BombInfo.num_batteries == 2 then
+                -- dec to bin
+                if tonumber(input, 2) == goal_num then
+                    completed = true
+                    mark_solved()
+                else
+                    count_strike()
+                end
+            elseif BombInfo.num_batteries == 3 then
+                -- dec to hex
+                if tonumber(input, 16) == goal_num then
+                    completed = true
+                    mark_solved()
+                else
+                    count_strike()
+                end
+            end
         end
     end
     buttonPressed = -1
+
+    
 end
 
 -- Some other useful functions:
