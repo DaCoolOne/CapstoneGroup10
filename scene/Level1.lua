@@ -1,6 +1,7 @@
  -- level1.lua
  -- By: Michael Johnson
-local level1 = {}
+ local level1 = {}
+
 
 function level1.load()
      -- Modules to load
@@ -21,5 +22,5 @@ function level1.load()
      -- Deals with framework.update, framework.draw, etc
     setmetatable(level1, { __index = framework })
 end
-
+ 
 return level1
