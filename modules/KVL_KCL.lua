@@ -6,8 +6,12 @@ local numpad = {}
 local img, text
 local width = 400
 local height = 400
-local buttons = {"0","1","2","3","4","5","6","7","8","9",".","-","<-"}
+local buttons = {"0","1","2","3","4","5","6","7","8","9",".","-","<-", "ENTER"}
 local module_complete = 0
+local rand_1 = math.random(0, 5000)
+local rand_2 = math.random(0, 5000)
+local solution = 9 / (rand_1 + rand_2)
+local answer = ""
 
 function module.load()
     -- This function is called once when the module is first loaded. You should put any first-time generation code here.
@@ -36,7 +40,7 @@ function module.load()
                 h = numpad_button_size,
                 text = buttons[i],
             }
-
+        
         else
             numpad[i] = {
                 x = current_width,
@@ -62,13 +66,13 @@ end
 
 function module.update(dt)
     -- This function is called every frame and is where you should update any state variables
+
 end
 
 function module.draw()
     -- This function is called every frame and is where you should draw your module
 
     love.graphics.setColor(1,1,1)
-    numpad_font = love.graphics.newFont(20)
     local numpad_button_size = 25
     local current_width = 25
     local current_height = height - (7*(numpad_button_size + 5)) - 5
@@ -99,8 +103,9 @@ function module.draw()
     
     love.graphics.setColor(1, 0, 0)
     love.graphics.rectangle("line", 100, 40, 200, 120)
-    love.graphics.print("R", 200, 15, 0, 2, 2)
-    love.graphics.print("R", 300, 100, 0, 2, 2)
+    love.graphics.print("Solve for the current \n... Round to the nearest whole number", 100, 235, 0, 1.2, 1.2)
+    love.graphics.print("R = " .. rand_1, 200, 15, 0, 1.5, 1.5)
+    love.graphics.print("R = " .. rand_2, 300, 100, 0, 1.5, 1.5)
     love.graphics.setColor(1,1,1)
     love.graphics.draw(img, 50, 50)
     love.graphics.rectangle("line", 100, 310,200, 50)
@@ -113,6 +118,9 @@ local buttonPressed
     function module.getButtonPressed(x, y)
         for k, v in pairs(buttons) do
             if (x > numpad[k].x and x < numpad[k].x + numpad[k].w) and (y > numpad[k].y and y < numpad[k].y + numpad[k].h) then
+                if numpad[k].text ~= "<-" or numpad[k].text ~= "ENTER" then
+                    answer = answer .. numpad[k].text
+                end
                 return numpad[k].text
             end
         end
@@ -125,10 +133,17 @@ local buttonPressed
     function module.mousereleased(x, y)
         buttonPressed = module.getButtonPressed(x, y)
         if buttonPressed ~= nil then
-            if buttonPressed ~= -1 and buttonPressed ~= "<-" and #text < 10 then
+            if buttonPressed ~= -1 and buttonPressed ~= "<-" and #text < 10 and buttonPressed ~= "ENTER" then
                 text = text .. buttonPressed
             elseif buttonPressed ~= -1 and buttonPressed == "<-" and #text > 0 then
                 text = text:sub(1, -2)
+                answer = answer:sub(1, -2)
+            elseif buttonPressed ~= -1 and buttonPressed == 'ENTER' and #text > 0 then
+                if answer == math.floor(solution+0.5) then
+                    module_complete = 1
+                else
+                    count_strike()
+                end
             end
         end
         buttonPressed = -1
