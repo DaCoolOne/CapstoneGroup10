@@ -2,26 +2,10 @@
  -- By: Michael Johnson
 local framework = {}
 
- -- Modules to load
-local MODULE_TO_RENDER_1 = "example_module copy"
-local MODULE_TO_RENDER_2 = "KVL_KCL"
-local MODULE_TO_RENDER_3 = "component"
-local MODULE_TO_RENDER_4 = "binary_decimal_module"
-
-local INFO_MODULE = "info_module"
-
- -- Gets modules from files
-local module_1 = love.filesystem.load("modules/" .. MODULE_TO_RENDER_1 .. '.lua')()
-local module_2 = love.filesystem.load("modules/" .. MODULE_TO_RENDER_2 .. '.lua')()
-local module_3 = love.filesystem.load("modules/" .. MODULE_TO_RENDER_3 .. '.lua')()
-local module_4 = love.filesystem.load("modules/" .. MODULE_TO_RENDER_4 .. '.lua')()
-local module_5 = love.filesystem.load("modules/" .. MODULE_TO_RENDER_1 .. '.lua')()
-local module_6 = love.filesystem.load("modules/" .. MODULE_TO_RENDER_2 .. '.lua')()
-local module_7 = love.filesystem.load("modules/" .. MODULE_TO_RENDER_3 .. '.lua')()
-local module_8 = love.filesystem.load("modules/" .. INFO_MODULE .. '.lua')()
+local args = { ... }
 
  -- Stores the modules and their x and y values
-local modules = {module_1, module_2, module_3, module_4, module_5, module_6, module_7, module_8}
+local modules = args[1]
 local modules_x = {}
 local modules_y = {}
 
@@ -281,7 +265,7 @@ function framework.load()
     end
 
      -- Sets dimensions of window
-    love.window.setMode(modules_x[max_x] + spacing - 15, modules_y[#modules_y] + spacing - 15)
+     love.window.setMode((spacing * 3) + 10, (spacing * 3) + 10)
 end
 
 function framework.update(dt)
@@ -361,7 +345,7 @@ function framework.draw()
     if(in_exit_screen == true) then
          -- Creates the background of exit screen
         love.graphics.setColor(0.5,0.5,0.5)
-        love.graphics.rectangle("fill", love.graphics.getWidth()/6, love.graphics.getHeight()/6, modules_x[max_x], modules_y[#modules_y])
+        love.graphics.rectangle("fill", love.graphics.getWidth()/6, love.graphics.getHeight()/6, modules_x[max_x], (modules_y[#modules_y] + spacing))
 
          -- Creates text for exit screen
         love.graphics.setColor(0,0,0)
