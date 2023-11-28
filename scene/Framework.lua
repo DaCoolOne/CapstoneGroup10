@@ -2,27 +2,7 @@
  -- By: Michael Johnson
 local framework = {}
 
-<<<<<<< Updated upstream
- -- Modules to load
-local MODULE_TO_RENDER_1 = "example_module copy"
-local MODULE_TO_RENDER_2 = "KVL_KCL"
-local MODULE_TO_RENDER_3 = "component"
-local MODULE_TO_RENDER_4 = "binary_decimal_module"
-
-local INFO_MODULE = "info_module"
-
- -- Gets modules from files
-local module_1 = love.filesystem.load("modules/" .. MODULE_TO_RENDER_1 .. '.lua')()
-local module_2 = love.filesystem.load("modules/" .. MODULE_TO_RENDER_2 .. '.lua')()
-local module_3 = love.filesystem.load("modules/" .. MODULE_TO_RENDER_3 .. '.lua')()
-local module_4 = love.filesystem.load("modules/" .. MODULE_TO_RENDER_4 .. '.lua')()
-local module_5 = love.filesystem.load("modules/" .. MODULE_TO_RENDER_1 .. '.lua')()
-local module_6 = love.filesystem.load("modules/" .. MODULE_TO_RENDER_2 .. '.lua')()
-local module_7 = love.filesystem.load("modules/" .. MODULE_TO_RENDER_3 .. '.lua')()
-local module_8 = love.filesystem.load("modules/" .. INFO_MODULE .. '.lua')()
-=======
 local args = { ... }
->>>>>>> Stashed changes
 
  -- Stores the modules and their x and y values
 local modules = args[1]
