@@ -7,6 +7,7 @@ local img, text
 local width = 400
 local height = 400
 local buttons = {"0","1","2","3","4","5","6","7","8","9",".","-","<-"}
+local module_complete = 0
 
 function module.load()
     -- This function is called once when the module is first loaded. You should put any first-time generation code here.
