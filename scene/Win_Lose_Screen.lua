@@ -81,11 +81,12 @@ function win_lose_screen.draw()
     local window_x = love.graphics.getWidth()
     local window_y = love.graphics.getHeight()
 
+     -- Prints the win or lose message
     love.graphics.setColor(1,1,1)
     if((BombInfo.strikes_remaining == 0) or (BombInfo.seconds_remaining == -1)) then
         love.graphics.print("Sorry, You Lose.", window_x/3.5, window_y/3, 0, 3)
     else
-        love.graphics.print("Congratulations, You Win!", window_x/6, window_y/3, 0, 3)
+        love.graphics.print("Congratulations, You Win!", window_x/7, window_y/3, 0, 3)
     end
 
      -- Draws each button
