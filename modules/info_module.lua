@@ -81,6 +81,11 @@ function module.draw()
     end
 end
 
+function module.mousepressed(x, y, button)
+    if(button == 1) then
+    end
+end
+
 -- Some other useful functions:
 -- function module.mousepressed
 -- function module.mousereleased
