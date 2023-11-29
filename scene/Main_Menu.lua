@@ -75,7 +75,7 @@ function main_menu.load()
      -- Saves each button position
     for i=1,3 do
         table.insert(button_x, x)
-        table.insert(button_y, (y*(i/2)))
+        table.insert(button_y, (y*(i/2)) + 25)
     end
 
      -- Sets the size of the window
@@ -86,6 +86,10 @@ function main_menu.update(dt)
 end
 
 function main_menu.draw()
+
+     -- Prints the title of the game
+    love.graphics.setColor(1,1,1)
+    love.graphics.print("Keep Talking And No One Gets Electricuted!", love.graphics.getWidth()/12.5, love.graphics.getHeight()/15, 0, 2.5, 2.5)
 
      -- Draws each button
     for i=1,3 do
