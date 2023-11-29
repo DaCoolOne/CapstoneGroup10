@@ -13,6 +13,7 @@ local rand_2 = math.random(0, 500)
 local rand_3 = math.random(0, 100) --Voltage
 local rand_4 = math.random(0, 500)
 local answer = ""
+local complete = false 
 
 function module.load()
     -- This function is called once when the module is first loaded. You should put any first-time generation code here.
@@ -24,12 +25,12 @@ function module.load()
         solution = (rand_3 / (rand_1 + ( 1 / (1 / rand_4 + 1 / rand_2))))
 
     elseif BombInfo.num_batteries == 2 then -- Current flows in reverse, voltage of battery is modified by 2
-        rand_3 = rand_3 * 2
-        solution = (rand_3 / (rand_1 + ( 1 / (1 / rand_4 + 1 / rand_2))))
+
+        solution = (rand_3 * 2 / (rand_1 + ( 1 / (1 / rand_4 + 1 / rand_2))))
 
     else -- Current flows in reverse, voltage of battery is modified by -2, 
-        rand_3 = rand_3 * -2
-        solution = (rand_3 / (rand_1 + ( 1 / (1 / rand_4 + 1 / rand_2))))
+
+        solution = (rand_3 * -2 / (rand_1 + ( 1 / (1 / rand_4 + 1 / rand_2))))
 
     end
 
@@ -85,13 +86,20 @@ end
 
 function module.update(dt)
     -- This function is called every frame and is where you should update any state variables
+    if module_complete == true then 
+        answer = "answer"
+    end 
 
 end
 
 function module.draw()
     -- This function is called every frame and is where you should draw your module
 
-    love.graphics.setColor(0.5, 0.7, 0.7)
+    if(module_complete == true) then
+        love.graphics.setColor(0,0,0)
+    else
+        love.graphics.setColor(0.5, 0.7, 0.7)
+    end
     love.graphics.rectangle("fill", 0, 0, 400, 400)
 
     love.graphics.setColor(1,1,1)
@@ -126,7 +134,7 @@ function module.draw()
     love.graphics.setColor(1, 0, 0)
     love.graphics.rectangle("line", 100, 40, 200, 120)
     love.graphics.rectangle("line", 100, 40, 150, 120)
-    love.graphics.print("Solve for the current \n... Round to the 5th decimal place.", 100, 235, 0, 1.2, 1.2)
+    --love.graphics.print("Solve for the current \n... Round to the 5th decimal place.", 100, 235, 0, 1.2, 1.2)
     love.graphics.print("R = " .. rand_1, 200, 15, 0, 1.5, 1.5)
     love.graphics.setColor(1, 1, 1)
     love.graphics.draw(R_hor, 135, 30)
