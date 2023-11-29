@@ -39,6 +39,7 @@ function module.load()
     -- This function is called once when the module is first loaded. You should put any first-time generation code here.
 
     battery = love.graphics.newImage("resources/battery.png")
+    mark_solved()
 
     -- current time + 5 minutes
     start_time = love.timer.getTime()
