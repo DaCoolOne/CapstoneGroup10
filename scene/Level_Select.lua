@@ -71,7 +71,7 @@ function main_menu.load()
 
      -- Finds the first button's position
     local x = love.graphics.getWidth()/4
-    local y = love.graphics.getHeight()/2
+    local y = love.graphics.getHeight()/2.5
 
      -- Saves each button position
      for i, current in ipairs(button_words) do
