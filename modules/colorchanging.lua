@@ -44,6 +44,8 @@ function module.mousepressed(x, y, button)
             else
                 color_change = true
             end
+
+            count_strike()
         end
     end
 end
