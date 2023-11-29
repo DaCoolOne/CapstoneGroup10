@@ -20,6 +20,8 @@ BombInfo = {
 
 math.randomseed(os.time())
 
+love.graphics.setBackgroundColor(0, 0.25, 0)
+
 -- A little black magic to prevent people from setting global variables accidentally.
 setmetatable(_G,{ __index = global_consts, __newindex = function(_, k, _) error(("Accidental global variable %s detected! Please use the \"local\" keyword to avoid cluttering the global namespace!\n\nIf you intended to create a global variable, please contact Scott."):format(k), 2) end })
 

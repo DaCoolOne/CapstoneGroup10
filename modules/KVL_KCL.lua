@@ -91,6 +91,9 @@ end
 function module.draw()
     -- This function is called every frame and is where you should draw your module
 
+    love.graphics.setColor(0.5, 0.7, 0.7)
+    love.graphics.rectangle("fill", 0, 0, 400, 400)
+
     love.graphics.setColor(1,1,1)
     local numpad_button_size = 25
     local current_width = 25

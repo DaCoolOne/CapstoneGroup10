@@ -4,13 +4,13 @@ local level1 = {}
 
 function level1.load()
      -- Modules to load
-    local MODULE_TO_RENDER_1 = "example_module copy"
-    local MODULE_TO_RENDER_3 = "colorchanging"
-    local MODULE_TO_RENDER_4 = "info_module"
+    local MODULE_TO_RENDER_1 = "digital_logic"
+    local MODULE_TO_RENDER_2 = "binary_decimal_module"
+    local MODULE_TO_RENDER_3 = "info_module"
  
      -- Gets modules from files
-    local module_1 = love.filesystem.load("modules/" .. MODULE_TO_RENDER_4 .. '.lua')()
-    local module_2 = love.filesystem.load("modules/" .. MODULE_TO_RENDER_1 .. '.lua')()
+    local module_1 = love.filesystem.load("modules/" .. MODULE_TO_RENDER_1 .. '.lua')()
+    local module_2 = love.filesystem.load("modules/" .. MODULE_TO_RENDER_2 .. '.lua')()
     local module_3 = love.filesystem.load("modules/" .. MODULE_TO_RENDER_3 .. '.lua')()
  
      -- Stores the modules and their x and y values

@@ -74,6 +74,9 @@ end
 function module.draw()
     -- This function is called every frame and is where you should draw your module
 
+    love.graphics.setColor(0.7, 0.7, 0.5)
+    love.graphics.rectangle("fill", 0, 0, 400, 400)
+
     for k, v in pairs(buttons) do
         love.graphics.setColor(1,1,1)
         love.graphics.draw(img, v.x, v.y, 0, 0.75, 0.75)
