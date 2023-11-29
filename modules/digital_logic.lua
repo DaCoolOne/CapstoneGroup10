@@ -250,7 +250,6 @@ function module.mousepressed(x, y, button)
         -- -- SUBMIT BUTTON CLICKABLE AREA 
         if x > 300 and x < 380 and y > 350 and y < 400 then 
             -- CHECK IF all boxes are correct 
-            submitted = true 
             module.checkAnswer()
         end 
 
@@ -293,6 +292,7 @@ function module.checkAnswer()
     end
 
     if allCorrect then
+        submitted = true
         mark_solved()
     else
         count_strike()
