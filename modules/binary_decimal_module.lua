@@ -105,6 +105,7 @@ function module.getButtonPressed(x, y)
             return k
         end
     end
+    return -1
 end
 
 function module.mousepressed(x, y)
