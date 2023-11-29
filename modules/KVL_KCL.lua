@@ -3,23 +3,40 @@ local module = {}
 -- Generally speaking, when writing Lua code you should make your variables local unless you have a good reason to make them global. It's just good to avoid cluttering the global namespace.
 -- There are exceptions, such as in the case of the info module.
 local numpad = {}
-local img, text
+local img, text, solution, R_hor, R_ver
 local width = 400
 local height = 400
 local buttons = {"0","1","2","3","4","5","6","7","8","9",".","-","<-", "ENTER"}
 local module_complete = false
 local rand_1 = math.random(0, 500)
 local rand_2 = math.random(0, 500)
-local rand_3 = math.random(0, 100)
+local rand_3 = math.random(0, 100) --Voltage
 local rand_4 = math.random(0, 500)
-local solution = (rand_3 / (rand_1 + ( 1 / (1 / rand_4 + 1 / rand_2))))
 local answer = ""
 
 function module.load()
     -- This function is called once when the module is first loaded. You should put any first-time generation code here.
+    love.graphics.setColor(0.6, 0.65, 0.6, 0.5)
+    love.graphics.rectangle("fill", 0, 0, 400, 400)
+    
+    if BombInfo.num_batteries == 1 then -- Current flows normally
+        rand_3 = rand_3 * 1
+        solution = (rand_3 / (rand_1 + ( 1 / (1 / rand_4 + 1 / rand_2))))
+
+    elseif BombInfo.num_batteries == 2 then -- Current flows in reverse, voltage of battery is modified by 2
+        rand_3 = rand_3 * 2
+        solution = (rand_3 / (rand_1 + ( 1 / (1 / rand_4 + 1 / rand_2))))
+
+    else -- Current flows in reverse, voltage of battery is modified by -2, 
+        rand_3 = rand_3 * -2
+        solution = (rand_3 / (rand_1 + ( 1 / (1 / rand_4 + 1 / rand_2))))
+
+    end
 
     text = ""
     answer = ""
+    R_hor = love.graphics.newImage("resources/resistor_horizontal.png")
+    R_ver = love.graphics.newImage("resources/resistor_vertical.png")
     img = love.graphics.newImage("resources/battery.png") -- Load picture of battery for source    
     local numpad_button_size = 25
     local current_width = 25
@@ -64,7 +81,6 @@ function module.load()
         end
     end
 
-    love.graphics.setBackgroundColor(0.6, 0.65, 0.6, 0.5)
 end
 
 function module.update(dt)
@@ -109,8 +125,16 @@ function module.draw()
     love.graphics.rectangle("line", 100, 40, 150, 120)
     love.graphics.print("Solve for the current \n... Round to the 5th decimal place.", 100, 235, 0, 1.2, 1.2)
     love.graphics.print("R = " .. rand_1, 200, 15, 0, 1.5, 1.5)
-    love.graphics.print("R = " .. rand_2, 300, 100, 0, 1.5, 1.5)
-    love.graphics.print("R = " .. rand_4, 175, 100, 0, 1.5, 1.5)
+    love.graphics.setColor(1, 1, 1)
+    love.graphics.draw(R_hor, 135, 30)
+    love.graphics.setColor(1, 0, 0)
+    love.graphics.print("R = " .. rand_2, 300, 80, 0, 1.5, 1.5)
+    love.graphics.setColor(1, 1, 1)
+    love.graphics.draw(R_ver, 290, 75)
+    love.graphics.setColor(1, 0, 0)
+    love.graphics.print("R = " .. rand_4, 175, 80, 0, 1.5, 1.5)
+    love.graphics.setColor(1, 1, 1)
+    love.graphics.draw(R_ver, 240, 75)
     love.graphics.print("V = " .. rand_3, 25, 25, 0, 1.5, 1.5)
     love.graphics.setColor(1,1,1)
     love.graphics.draw(img, 50, 50)
