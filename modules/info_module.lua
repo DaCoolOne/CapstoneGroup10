@@ -79,13 +79,6 @@ function module.draw()
     for i = 1, BombInfo.num_batteries do
         love.graphics.draw(battery, ((i - 1) * (100)) + 5, 300)
     end
-
-    -- love.graphics.setColor(1, 1, 1)
-    -- love.graphics.print("Serial: "..BombInfo.serial, 10, 378)
-    -- love.graphics.print("Manufacturer:"..BombInfo.manufacturer, 10, 350)
-    -- love.graphics.print("Number of Batteries:"..BombInfo.num_batteries, 10, 325)
-
-    love.graphics.circle("line", love.mouse.getX(), love.mouse.getY(), 20)
 end
 
 -- Some other useful functions:
