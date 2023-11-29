@@ -1,6 +1,7 @@
 local component = {}
+local looping_variable=1
 local togg_switch=0
-local tries = 2
+BombInfo.strikes_remaining = 3
 local success = 0
 local cursor = {}
 cursor.x = 0
@@ -20,7 +21,7 @@ function component.check_values()
       success =1
     end
     if circuit.v ~= circuit.i*circuit.r then
-      tries = tries-1
+      BombInfo.strikes_remaining = BombInfo.strikes_remaining-1
       togg_switch=0
     end
     togg_switch=0
@@ -28,20 +29,7 @@ function component.check_values()
 end
 function component.update(dt)
     print(dt)
-    if 1 <= x  and x <= 399 and 1 <= y and y <= 399 then
-      if love.keyboard.isDown("right") then
-        x = x + 60 * dt
-      end
-      if love.keyboard.isDown("left") then
-        x = x - 60 * dt
-      end
-      if love.keyboard.isDown("up") then
-        y = y - 60 * dt
-      end
-      if love.keyboard.isDown("down") then
-        y = y + 60 * dt
-      end
-    end
+    x , y = love.mouse.getPosition()
     if x < 1 then
       x=1
     end
@@ -60,23 +48,44 @@ function component.update(dt)
         local g = cursor.x
       end
     end
+    love.graphics.setColor( 1, 1, 1, 1 )
+    love.graphics.print("apple",0,40)
+    love.graphics.print(y,0,70)
+    if love.mousepressed(x,y,1) then
+      while looping_variable==1 do
+      love.graphics.print(y,500,70)
+      cursor.x = x
+      cursor.y = y
+      love.graphics.print(x,500,90)
+        if love.mousereleased() then
+          looping_variable=0
+        end
+      end
+      looping_variable=1
+    end
+end
+function component.drawstrikes()
+  love.graphics.setColor( 1, 1, 0, 1 )
+  if BombInfo.strikes_remaining < 2 then
+    love.graphics.setColor(1,0,0,1)
+  end
+  love.graphics.rectangle("fill", 380, 380, 10, 10 )
+  love.graphics.setColor( 1, 1, 0, 1 )
+  if BombInfo.strikes_remaining < 1 then
+    love.graphics.setColor(1,0,0,1)
+  end
+  love.graphics.rectangle( "fill", 380, 360, 10, 10 )  
+end
+function component.drawcursor()
+  love.graphics.setColor( 0, 0, 0, 1 )
+  love.graphics.rectangle("fill", x,y, 3, 3)  
 end
 function component.draw()
-  if success == 0 and tries >= 0 then
+  if success == 0 and BombInfo.strikes_remaining >= 0 then
     love.graphics.setColor( 1, 1, 1, 1 )
     love.graphics.rectangle("fill", 0, 0, 400, 400)
-    love.graphics.setColor( 0, 0, 0, 1 )
-    love.graphics.rectangle("fill", x,y, 3, 3)
-    love.graphics.setColor( 1, 1, 0, 1 )
-    if tries < 2 then
-      love.graphics.setColor(1,0,0,1)
-    end
-    love.graphics.rectangle("fill", 380, 380, 10, 10 )
-    love.graphics.setColor( 1, 1, 0, 1 )
-    if tries < 1 then
-      love.graphics.setColor(1,0,0,1)
-    end
-    love.graphics.rectangle( "fill", 380, 360, 10, 10 )
+    component.drawstrikes()
+    component.drawcursor()
     love.graphics.setColor(0,0,0,1)
     love.graphics.rectangle("line",100,100,200,200)
     love.graphics.setColor(0,0,1,1)
@@ -102,11 +111,11 @@ function component.draw()
     component.selec()
     component.check_values()
   end
-  if success == 1 and tries >=0 then 
+  if success == 1 and BombInfo.strikes_remaining>=0 then 
     love.graphics.setColor(1,0,0,1)
     love.graphics.print("A WINNER IS YOU!!!!", 185,120)
   end
-  if tries < 0 then
+  if BombInfo.strikes_remaining < 0 then
     love.graphics.setColor(1,0,0,1)
     love.graphics.print("All Your Base Are Belong To Us!", 185,120)
   end
